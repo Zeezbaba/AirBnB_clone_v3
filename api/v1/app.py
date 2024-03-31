@@ -19,8 +19,8 @@ def close_str(obj):
     storage.close()
 
 
-@app.errorhandler
-def handle_err_404(error):
+@app.errorhandler(404)
+def handle_err_404(exception):
     """customized error handler"""
     return make_response(jsonify({"error": "Not found"}), 404)
 
