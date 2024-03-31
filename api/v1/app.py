@@ -20,7 +20,7 @@ def close_str(obj):
 
 
 @app.errorhandler
-def handle_err_404(exception):
+def handle_err_404(error):
     """customized error handler"""
     return make_response(jsonify({"error": "Not found"}), 404)
 
