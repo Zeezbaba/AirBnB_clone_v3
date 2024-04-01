@@ -14,31 +14,29 @@ def retrieve_states():
     """
     Retrieves the list of all State objects
     """
-    all_states = []
-    state_obj = storage.all("State")
-    for state in state_obj.values():
-        all_states.append(state.to_dict())
+    all_states = [obj.to_dict() for obj in storage.all(State).values()]
 
     return jsonify(all_states)
 
 
-@app_views.route("/states/<state_id>",  methods=["GET"], strict_slashes=False)
+@app_views.route("/states/<string:state_id>",  methods=["GET"],
+                 strict_slashes=False)
 def retrieve_state_id(state_id):
     """Retrieves a State object by id"""
-    state = storage.get("State", str(state_id))
-    if state is None:
+    stateId = storage.get(State, state_id)
+    if stateId is None:
         abort(404)
-    return jsonify(state.to_dict())
+    return jsonify(stateId.to_dict())
 
 
-@app_views.route("/states/<state_id>", methods=["DELETE"],
+@app_views.route("/states/<string:state_id>", methods=["DELETE"],
                  strict_slashes=False)
 def delete_state_id(state_id):
     """Deletes a State object by id"""
-    state = storage.get("State", str(state_id))
-    if state is None:
+    stateId = storage.get(State, state_id)
+    if stateId is None:
         abort(404)
-    storage.delete(state)
+    storage.delete(stateId)
     storage.save()
     return jsonify({})
 
@@ -65,11 +63,11 @@ def put_state(state_id):
     dict_json = request.get_json(silent=True)
     if dict_json is None:
         abort(400, 'Not a JSON')
-    state = storage.get(State, state_id)
-    if state is None:
+    stateId = storage.get(State, state_id)
+    if stateId is None:
         abort(404)
     for key, value in dict_json.items():
         if key not in ['id', 'created_at', 'updated_at']:
-            setattr(state, key, value)
-    state.save()
-    return jsonify(state.to_dict())
+            setattr(stateId, key, value)
+    storage.save()
+    return jsonify(stateId.to_dict())
