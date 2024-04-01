@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-The Application File
+The Base application file
 """
 
 from models import storage
