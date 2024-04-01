@@ -18,7 +18,6 @@ def state_no_id():
     if request.method == 'GET':
         states = storage.all('State')
         states = list(obj.to_dict() for obj in states.values())
-        # return jsonify(states)
         return json.dumps(states, indent=4)
 
     if request.method == 'POST':
@@ -44,11 +43,11 @@ def state_id(state_id=None):
         abort(404, 'Not found')
 
     if request.method == 'GET':
-        return jsonify(state.to_dict())
+        return json.dumps(state.to_dict(), indent=4)
 
     if request.method == 'DELETE':
         state.delete()
-        del state
+        storage.save()
         return jsonify({})
 
     if request.method == 'PUT':
@@ -59,4 +58,4 @@ def state_id(state_id=None):
             if attr not in ['id', 'created_at', 'updated_at']:
                 setattr(state, attr, value)
         state.save()
-        return jsonify(state.to_dict())
+        return json.dumps(state.to_dict(), indent=4)

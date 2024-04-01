@@ -13,17 +13,17 @@ from models.state import State
 
 @app_views.route('/states/<string:state_id>/cities',
                  methods=['GET', 'POST'], strict_slashes=False)
-def cities_from_state(req, state_id):
+def cities_from_state(state_id):
     '''
     Serves endpoints for city from a state objs
     '''
     state_obj = storage.get(State, f"{state_id}")
     if state_obj is None:
         abort(404)
-    if req.method == 'GET':
+    if request.method == 'GET':
         cities = []
         for city in state_obj.cities:
-            cities.append(city.to_dict)
+            cities.append(city.to_dict())
         return json.dumps(cities, indent=4)
 
     if request.method == 'POST':

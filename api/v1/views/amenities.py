@@ -34,7 +34,7 @@ def get_amenities():
         new_amenity = Amenity(**payload)
         new_amenity.save()
         return make_response(
-            json.dumps({new_amenity.to_dict()}, indent=4),
+            json.dumps(new_amenity.to_dict(), indent=4),
             201)
 
 

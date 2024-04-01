@@ -19,7 +19,7 @@ def users_no_id():
         users = []
         for user in storage.all("User").values():
             users.append(user.to_dict())
-        return json.dumps(users)
+        return json.dumps(users, indent=4)
 
     if request.method == 'POST':
         payload = request.get_json()
