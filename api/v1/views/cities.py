@@ -40,14 +40,14 @@ def cities_from_state(state_id):
         return make_response(json.dumps(city.to_dict(), indent=4), 201)
 
 
-@app_views.route('/cities/<city_id>',
+@app_views.route('/cities/<string:city_id>',
                  methods=['GET', 'POST', 'DELETE', 'PUT'],
                  strict_slashes=False)
-def cities_id(city_id=None):
+def cities_id(city_id):
     '''
     Serves requests for city API endpoint
     '''
-    city_obj = storage.get(City, f"{city_id}")
+    city_obj = storage.get(City, city_id)
     if city_obj is None:
         abort(404)
 
