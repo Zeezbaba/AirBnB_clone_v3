@@ -4,7 +4,7 @@
     for the AMenities model
 '''
 from api.v1.views import app_views
-from flask import request, abort, Flask, make_response
+from flask import jsonify, request, abort, Flask, make_response
 import json
 from models import storage
 from models.amenity import Amenity
@@ -44,7 +44,7 @@ def amenities(amenity_id):
     '''
     amenity API
     '''
-    amenity_obj = storage.get(Amenity, f"{amenity_id}")
+    amenity_obj = storage.get(Amenity, amenity_id)
     if amenity_obj is None:
         abort(404)
 
@@ -54,7 +54,7 @@ def amenities(amenity_id):
     if request.method == 'DELETE':
         amenity_obj.delete()
         storage.save()
-        return json.dumps({})
+        return jsonify({})
 
     if request.method == 'PUT':
         payload = request.get_json()
@@ -64,5 +64,5 @@ def amenities(amenity_id):
         for attr, value in payload.items():
             if attr not in ['id', 'created_at', 'updated_at']:
                 setattr(amenity_obj, attr, value)
-        amenity_obj.save()
+        storage.save()
         return json.dumps(amenity_obj.to_dict(), indent=4)
