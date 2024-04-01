@@ -4,7 +4,7 @@
     for the users model
 '''
 from api.v1.views import app_views
-from flask import request, abort, Flask, make_response
+from flask import abort, make_response, request
 import json
 from models import storage
 from models.user import User

@@ -4,12 +4,12 @@
     for the REviews model
 '''
 from api.v1.views import app_views
-from flask import request, abort, Flask, make_response
+from flask import abort, Flask, make_response, request
 import json
 from models import storage
+from models.place import Place
 from models.review import Review
 from models.user import User
-from models.place import Place
 
 
 @app_views.route('/places/<string:place_id>/reviews',
