@@ -14,7 +14,8 @@ from models.amenity import Amenity
 from models.state import State
 
 
-@app_views.route('/cities/<string:city_id>/places', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/cities/<string:city_id>/places',
+                 methods=['GET', 'POST'], strict_slashes=False)
 def places_ops(city_id):
     '''
     Handles places CRUD ops
@@ -28,25 +29,29 @@ def places_ops(city_id):
         for place in city_obj.places:
             places.append(place.to_dict())
         return json.dumps(places, indent=4)
-    
+
     if request.method == 'POST':
         payload = request.get_json()
         if payload is None:
-            return make_response(json.dumps({'error': 'Not a JSON'}, indent=4), 400)
+            return make_response(
+                json.dumps({'error': 'Not a JSON'}, indent=4), 400)
         if payload.get('user_id') is None:
-            return make_response(json.dumps({'error': 'Missing user_id'}, indent=4), 400)
+            return make_response(
+                json.dumps({'error': 'Missing user_id'}, indent=4), 400)
         user = storage.get(User, payload['user_id'])
         if user is None:
             abort(404)
         if payload.get('name') is None:
-            return make_response(json.dumps({'error': 'Missing name'}, indent=4), 400)
+            return make_response(
+                json.dumps({'error': 'Missing name'}, indent=4), 400)
         payload['city_id'] = city_id
         new_place = Place(**payload)
         new_place.save()
         return make_response(json.dumps(new_place.to_dict(), indent=4), 201)
 
 
-@app_views.route('/places/<string:place_id>', methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
+@app_views.route('/places/<string:place_id>',
+                 methods=['GET', 'DELETE', 'PUT'], strict_slashes=False)
 def places_id(place_id):
     '''
     Handles endpoint with place id
@@ -56,7 +61,7 @@ def places_id(place_id):
         abort(404)
     if request.method == 'GET':
         return json.dumps(place_obj.to_dict(), indent=4)
-    
+
     if request.method == 'DELETE':
         place_obj.delete()
         storage.save()
@@ -65,9 +70,11 @@ def places_id(place_id):
     if request.method == 'PUT':
         payload = request.get_json()
         if payload is None:
-            return make_response(json.dumps({'error': 'Not a JSON'}, indent=4), 400)
+            return make_response(
+                json.dumps({'error': 'Not a JSON'}, indent=4), 400)
         for attr, value in payload.items():
-            if attr not in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
+            if attr not in ['id', 'user_id', 'city_id',
+                            'created_at', 'updated_at']:
                 setattr(place_obj, attr, value)
         place_obj.save()
         return json.dumps(place_obj.to_dict(), indent=4)
@@ -79,8 +86,9 @@ def places_search():
     Search enpoint for places
     '''
     if request.get_json is None:
-        return make_response(json.dumps({'error': 'Not a JSON'}, indent=4), 400)
-    
+        return make_response(
+            json.dumps({'error': 'Not a JSON'}, indent=4), 400)
+
     params = request.get_json()
     states = params.get('states', [])
     cities = params.get('cities', [])
@@ -90,7 +98,7 @@ def places_search():
         amenity = storage.get(Amenity, f"{amenity_id}")
         if amenity:
             amenity_objects.append(amenity)
-    
+
     if states == cities == []:
         places = storage.all('Place').values()
     else:
@@ -105,7 +113,7 @@ def places_search():
             city = storage.get(City, f"{city_id}")
             for place in city.places:
                 places.append(place)
-    
+
     confirmed_places = []
     for place in places:
         place_amenities = place.amenities
@@ -114,5 +122,5 @@ def places_search():
             if amenity not in place_amenities:
                 confirmed_places.pop()
                 break
-    
+
     return json.dumps(confirmed_places)

@@ -20,7 +20,7 @@ def state_no_id():
         states = list(obj.to_dict() for obj in states.values())
         # return jsonify(states)
         return json.dumps(states, indent=4)
-    
+
     if request.method == 'POST':
         data = request.get_json()
 
@@ -33,7 +33,8 @@ def state_no_id():
         return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route('/states/<state_id>', methods=['GET', 'POST', 'DELETE', 'PUT'])
+@app_views.route('/states/<state_id>',
+                 methods=['GET', 'POST', 'DELETE', 'PUT'])
 def state_id(state_id=None):
     '''
     Gets a single state from the storage engines
@@ -44,12 +45,12 @@ def state_id(state_id=None):
 
     if request.method == 'GET':
         return jsonify(state.to_dict())
-    
+
     if request.method == 'DELETE':
         state.delete()
         del state
         return jsonify({})
-    
+
     if request.method == 'PUT':
         data = request.get_json()
         if data is None:
