@@ -21,7 +21,7 @@ def places_ops(city_id):
     Handles places CRUD ops
     '''
     if request.method == 'GET':
-        city_obj = storage.get(City, f"{city_id}")
+        city_obj = storage.get(City, city_id)
         if city_obj is None:
             abort(404)
 
@@ -56,7 +56,7 @@ def places_id(place_id):
     '''
     Handles endpoint with place id
     '''
-    place_obj = storage.get(Place, f"{place_id}")
+    place_obj = storage.get(Place, place_id)
     if place_obj is None:
         abort(404)
     if request.method == 'GET':
