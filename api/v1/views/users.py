@@ -44,7 +44,7 @@ def users_id(user_id):
     '''
     Serves API endpoint with id param
     '''
-    user_obj = storage.get(User, f"{user_id}")
+    user_obj = storage.get(User, user_id)
     if user_obj is None:
         abort(404)
 
