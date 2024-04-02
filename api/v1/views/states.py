@@ -3,7 +3,7 @@
     API endpoint for the State model
 '''
 from api.v1.views import app_views
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, make_response
 import json
 from models import storage
 from models.state import State
@@ -52,7 +52,7 @@ def state_id(state_id=None):
     if request.method == 'PUT':
         data = request.get_json()
         if data is None:
-            abort(400, 'Not a JSON')
+            return make_response(jsonify({"error": "Not a JSON"}), 400)
         for attr, value in data.items():
             if attr not in ['id', 'created_at', 'updated_at']:
                 setattr(state, attr, value)
