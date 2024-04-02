@@ -8,7 +8,6 @@ from api.v1.views import app_views
 from os import getenv
 from flask import Flask, make_response, jsonify
 from flask_cors import CORS
-from flasgger import Swagger
 
 
 app = Flask(__name__)
@@ -27,13 +26,6 @@ def close_str(obj):
 def handle_err_404(exception):
     """customized error handler"""
     return make_response(jsonify({"error": "Not found"}), 404)
-
-
-app.config['SWAGGER'] = {
-    'title': 'AirBnB clone - RESTful API',
-    'uiversion': 3}
-
-Swagger(app)
 
 
 if __name__ == "__main__":
