@@ -17,7 +17,7 @@ def cities_from_state(state_id):
     '''
     Serves endpoints for city from a state objs
     '''
-    state_obj = storage.get(State, f"{state_id}")
+    state_obj = storage.get(State, state_id)
     if state_obj is None:
         abort(404)
     if request.method == 'GET':
