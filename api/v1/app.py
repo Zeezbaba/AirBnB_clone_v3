@@ -11,7 +11,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
+CORS(app, origins=['0.0.0.0'])
 app.register_blueprint(app_views)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
@@ -30,7 +30,7 @@ def handle_err_404(exception):
 
 if __name__ == "__main__":
 
-    host = getenv('HBNB_API_HOST', default='0.0.0.0')
-    port = getenv('HBNB_API_PORT', default=5000)
+    HOST = getenv('HBNB_API_HOST', default='0.0.0.0')
+    PORT = getenv('HBNB_API_PORT', default=5000)
 
-    app.run(host, int(port), threaded=True)
+    app.run(host=HOST, port=int(PORT), threaded=True)
