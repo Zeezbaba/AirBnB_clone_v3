@@ -31,13 +31,13 @@ def state_no_id():
         return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route('/states/<state_id>',
+@app_views.route('/states/<string:state_id>',
                  methods=['GET', 'POST', 'DELETE', 'PUT'])
 def state_id(state_id=None):
     '''
     Gets a single state from the storage engines
     '''
-    state = storage.get(State, f"{state_id}")
+    state = storage.get(State, state_id)
     if state is None:
         abort(404, 'Not found')
 
